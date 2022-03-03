@@ -14,8 +14,9 @@ class MockHolidayRepo: HolidayRepo {
         Holiday("Barcelona", of(2021, JULY, 28), of(2021, AUGUST, 6))
     )
 
-    override fun retrieveHolidays(): Collection<Holiday> {
-        return holidays
-    }
+    override fun retrieveHolidays(): Collection<Holiday>  = holidays
 
+    override fun retrieveHoliday(holidayName: String): Holiday =
+        holidays.firstOrNull { it.name == holidayName }
+            ?: throw NoSuchElementException("Could not find Holiday with name: $holidayName")
 }

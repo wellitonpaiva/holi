@@ -8,4 +8,5 @@ import org.springframework.stereotype.Service
 class HolidayService(private val repo: HolidayRepo) {
 
     fun retrieveHolidays(): Collection<Holiday> = repo.retrieveHolidays()
+    fun retrieveHoliday(holidayName: String): Holiday = repo.retrieveHoliday(holidayName)
 }

@@ -16,4 +16,11 @@ internal class HolidayServiceTest{
         service.retrieveHolidays()
         verify(exactly = 1) { repo.retrieveHolidays() }
     }
+
+    @Test
+    internal fun `should call its repo to retrieve holiday`() {
+        val holidayName = "Paris"
+        service.retrieveHoliday(holidayName)
+        verify(exactly = 1) { repo.retrieveHoliday(holidayName) }
+    }
 }

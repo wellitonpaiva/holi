@@ -10,6 +10,9 @@ import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.get
 import java.time.LocalDate
+import java.time.LocalDate.of
+import java.time.Month
+import java.time.Month.*
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -18,9 +21,11 @@ internal class HolidayControllerTest @Autowired constructor (
     val objectMapper: ObjectMapper
 ) {
 
+    val baseUrl = "/holidays"
+
     @Test
     internal fun `should return all holidays`() {
-        mockMvc.get("/holidays")
+        mockMvc.get(baseUrl)
             .andDo { print() }
             .andExpect {
                 status { isOk() }
@@ -30,5 +35,30 @@ internal class HolidayControllerTest @Autowired constructor (
                     jsonPath("$[1].name") { value("Barcelona") }
                 }
             }
+    }
+
+    @Test
+    internal fun `should return single holiday`() {
+        val holiday = "Paris"
+
+        mockMvc.get("$baseUrl/$holiday")
+            .andDo { print() }
+            .andExpect {
+                status { isOk() }
+                content {
+                    contentType(MediaType.APPLICATION_JSON)
+                    json(objectMapper.writeValueAsString(
+                        Holiday("Paris", of(2021, JUNE, 3), of(2021, JUNE, 6))
+                    ))
+                }
+            }
+    }
+
+    @Test
+    internal fun `should throw error when holiday not found`() {
+        val holidayName = "Acapulco"
+        mockMvc.get("$baseUrl/$holidayName")
+            .andDo { print() }
+            .andExpect { status { isNotFound() } }
     }
 }
