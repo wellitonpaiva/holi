@@ -6,4 +6,5 @@ interface HolidayRepo {
 
     fun retrieveHolidays(): Collection<Holiday>
     fun retrieveHoliday(holidayName: String): Holiday
+    fun addHoliday(holiday: Holiday): Holiday
 }

@@ -9,4 +9,5 @@ class HolidayService(private val repo: HolidayRepo) {
 
     fun retrieveHolidays(): Collection<Holiday> = repo.retrieveHolidays()
     fun retrieveHoliday(holidayName: String): Holiday = repo.retrieveHoliday(holidayName)
+    fun addHoliday(holiday: Holiday): Holiday = repo.addHoliday(holiday)
 }

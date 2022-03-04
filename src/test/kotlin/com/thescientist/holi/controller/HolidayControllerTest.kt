@@ -9,6 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.get
+import org.springframework.test.web.servlet.post
 import java.time.LocalDate
 import java.time.LocalDate.of
 import java.time.Month
@@ -60,5 +61,32 @@ internal class HolidayControllerTest @Autowired constructor (
         mockMvc.get("$baseUrl/$holidayName")
             .andDo { print() }
             .andExpect { status { isNotFound() } }
+    }
+
+    @Test
+    internal fun `should add new holiday`() {
+        val newHoliday = Holiday("Lisbon", of(2023, JUNE, 1), of(2023, JUNE, 4))
+        val newHolidayAsJson = objectMapper.writeValueAsString(newHoliday)
+        mockMvc.post(baseUrl) {
+            contentType = MediaType.APPLICATION_JSON
+            content = newHolidayAsJson
+        }
+            .andDo { print() }
+            .andExpect { content {
+                contentType(MediaType.APPLICATION_JSON)
+                json(newHolidayAsJson)
+            } }
+    }
+
+    @Test
+    internal fun `should throw error when holiday exists`() {
+        val existingHolidayAsJson = objectMapper.writeValueAsString(
+            Holiday("Paris", of(2021, JUNE, 3), of(2021, JUNE, 6)))
+        mockMvc.post(baseUrl) {
+            contentType = MediaType.APPLICATION_JSON
+            content = existingHolidayAsJson
+        }
+            .andDo { print() }
+            .andExpect { status { isBadRequest() } }
     }
 }
