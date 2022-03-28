@@ -27,4 +27,7 @@ class HolidayController(private val service: HolidayService) {
 
     @PostMapping
     fun addHoliday(@RequestBody holiday: Holiday): Holiday = service.addHoliday(holiday)
+
+    @PatchMapping
+    fun editHoliday(@RequestBody holiday: Holiday): Holiday = service.editHoliday(holiday)
 }

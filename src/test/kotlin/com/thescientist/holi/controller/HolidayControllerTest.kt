@@ -7,13 +7,13 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType
+import org.springframework.test.annotation.DirtiesContext
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.get
+import org.springframework.test.web.servlet.patch
 import org.springframework.test.web.servlet.post
-import java.time.LocalDate
 import java.time.LocalDate.of
-import java.time.Month
-import java.time.Month.*
+import java.time.Month.JUNE
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -88,5 +88,27 @@ internal class HolidayControllerTest @Autowired constructor (
         }
             .andDo { print() }
             .andExpect { status { isBadRequest() } }
+    }
+
+    @Test
+    @DirtiesContext
+    internal fun `should edit a holiday`() {
+        val newHoliday = Holiday("Paris", of(2022, JUNE, 3), of(2022, JUNE, 6))
+        val newHolidayAsJson = objectMapper.writeValueAsString(newHoliday)
+        mockMvc.patch(baseUrl) {
+            contentType = MediaType.APPLICATION_JSON
+            content = newHolidayAsJson
+        }
+            .andDo { print() }
+            .andExpect {
+                status { isOk() }
+                content { json(newHolidayAsJson) }
+            }
+
+        mockMvc.get("$baseUrl/${newHoliday.name}")
+            .andExpect {
+                status { isOk() }
+                content { json(newHolidayAsJson) }
+            }
     }
 }
