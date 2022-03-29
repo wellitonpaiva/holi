@@ -56,4 +56,12 @@ internal class MockHolidayRepoTest {
         val holiday = Holiday("Prague", of(2021, JUNE, 1), of(2021, JUNE, 3))
         assertThrows<IllegalArgumentException> { MockHolidayRepo().add(holiday) }
     }
+
+    @Test
+    internal fun `should edit holiday`() {
+        val holiday = Holiday("Barcelona", of(2021, Month.JULY, 28), of(2021, Month.AUGUST, 7))
+        val sut = MockHolidayRepo()
+        assertThat(sut.edit(holiday)).matches { it == holiday }
+        assertThat(sut.retrieve("Barcelona")).matches { it == holiday }
+    }
 }
