@@ -27,7 +27,6 @@ internal class HolidayControllerTest @Autowired constructor (
     @Test
     internal fun `should return all holidays`() {
         mockMvc.get(baseUrl)
-            .andDo { print() }
             .andExpect {
                 status { isOk() }
                 content {
@@ -43,7 +42,6 @@ internal class HolidayControllerTest @Autowired constructor (
         val holiday = "Paris"
 
         mockMvc.get("$baseUrl/$holiday")
-            .andDo { print() }
             .andExpect {
                 status { isOk() }
                 content {
@@ -59,7 +57,6 @@ internal class HolidayControllerTest @Autowired constructor (
     internal fun `should throw error when holiday not found`() {
         val holidayName = "Acapulco"
         mockMvc.get("$baseUrl/$holidayName")
-            .andDo { print() }
             .andExpect { status { isNotFound() } }
     }
 
@@ -71,7 +68,6 @@ internal class HolidayControllerTest @Autowired constructor (
             contentType = MediaType.APPLICATION_JSON
             content = newHolidayAsJson
         }
-            .andDo { print() }
             .andExpect { content {
                 contentType(MediaType.APPLICATION_JSON)
                 json(newHolidayAsJson)
@@ -86,7 +82,6 @@ internal class HolidayControllerTest @Autowired constructor (
             contentType = MediaType.APPLICATION_JSON
             content = existingHolidayAsJson
         }
-            .andDo { print() }
             .andExpect { status { isBadRequest() } }
     }
 
@@ -99,7 +94,6 @@ internal class HolidayControllerTest @Autowired constructor (
             contentType = MediaType.APPLICATION_JSON
             content = newHolidayAsJson
         }
-            .andDo { print() }
             .andExpect {
                 status { isOk() }
                 content { json(newHolidayAsJson) }
