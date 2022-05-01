@@ -4,6 +4,7 @@ import org.springframework.boot.gradle.tasks.bundling.BootBuildImage
 plugins {
 	id("org.springframework.boot") version "2.5.6"
 	id("io.spring.dependency-management") version "1.0.11.RELEASE"
+	id("org.sonarqube") version "3.3"
 	kotlin("jvm") version "1.6.0"
 	kotlin("plugin.spring") version "1.6.0"
 }
@@ -24,6 +25,14 @@ dependencies {
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("io.mockk:mockk:1.12.3")
+}
+
+sonarqube {
+	properties {
+		property("sonar.projectKey", "wellitonpaiva_holi")
+		property("sonar.organization", "wellitonpaiva")
+		property("sonar.host.url", "https://sonarcloud.io")
+	}
 }
 
 tasks.withType<KotlinCompile> {
