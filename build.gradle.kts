@@ -5,6 +5,7 @@ plugins {
 	id("org.springframework.boot") version "2.5.6"
 	id("io.spring.dependency-management") version "1.0.11.RELEASE"
 	id("org.sonarqube") version "3.3"
+	id("jacoco")
 	kotlin("jvm") version "1.6.0"
 	kotlin("plugin.spring") version "1.6.0"
 }
@@ -33,6 +34,13 @@ sonarqube {
 		property("sonar.organization", "wellitonpaiva")
 		property("sonar.host.url", "https://sonarcloud.io")
 	}
+}
+
+tasks.test {
+	finalizedBy(tasks.jacocoTestReport) // report is always generated after tests run
+}
+tasks.jacocoTestReport {
+	dependsOn(tasks.test) // tests are required to run before generating the report
 }
 
 tasks.withType<KotlinCompile> {
